@@ -20,6 +20,9 @@ COPY . .
 # Set environment variables
 ENV PYTHONPATH=/app
 ENV FFMPEG_PATH=/usr/bin/ffmpeg
+ENV FISH_SPEECH_MODEL_PATH=/app/checkpoints/s2-pro
+ENV LIVEPORTRAIT_MODEL_PATH=/app/LivePortrait/models
+ENV LTX_VIDEO_MODEL_PATH=/app/LTX-Video
 
 # RunPod serverless handler
 CMD ["python", "-m", "runpod.serverless", "--start_path", "handler.py"]
