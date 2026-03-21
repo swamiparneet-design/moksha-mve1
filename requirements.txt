@@ -1,0 +1,33 @@
+# Core Dependencies
+fastapi==0.109.0
+uvicorn[standard]==0.27.0
+python-multipart==0.0.6
+pydantic==2.5.3
+pydantic-settings==2.1.0
+
+# Task Queue
+celery==5.3.6
+redis==5.0.1
+
+# HTTP & API
+requests==2.31.0
+aiohttp==3.9.1
+httpx==0.26.0
+
+# Image & Video Processing
+pillow==10.2.0
+opencv-python==4.9.0.80
+moviepy==1.0.3
+
+# Utilities
+python-dotenv==1.0.0
+loguru==0.7.2
+tqdm==4.66.1
+
+# Text Processing
+nltk==3.8.1
+langdetect==1.0.9
+
+# Optional - for future TTS integration
+# torch
+# torchaudio
