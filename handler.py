@@ -9,7 +9,7 @@ import sys
 from pathlib import Path
 
 # Add workspace to path
-sys.path.insert(0, '/workspace')
+sys.path.insert(0, '/app')
 
 def generate_video(job):
     """
