@@ -31,3 +31,6 @@ langdetect==1.0.9
 # Optional - for future TTS integration
 # torch
 # torchaudio
+
+# RunPod Serverless
+runpod==2.8.0
