@@ -1,6 +1,6 @@
 FROM runpod/pytorch:2.1.0-py3.10-cuda11.8.0-devel
 
-WORKDIR /app
+WORKDIR /workspace
 
 # Install system dependencies
 RUN apt-get update && apt-get install -y \
@@ -18,11 +18,11 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY . .
 
 # Set environment variables
-ENV PYTHONPATH=/app
+ENV PYTHONPATH=/workspace
 ENV FFMPEG_PATH=/usr/bin/ffmpeg
-ENV FISH_SPEECH_MODEL_PATH=/app/checkpoints/s2-pro
-ENV LIVEPORTRAIT_MODEL_PATH=/app/LivePortrait/models
-ENV LTX_VIDEO_MODEL_PATH=/app/LTX-Video
+ENV FISH_SPEECH_MODEL_PATH=/workspace/checkpoints/s2-pro
+ENV LIVEPORTRAIT_MODEL_PATH=/workspace/LivePortrait/models
+ENV LTX_VIDEO_MODEL_PATH=/workspace/LTX-Video
 
 # RunPod serverless handler
 CMD ["python", "-m", "runpod.serverless", "--start_path", "handler.py"]
