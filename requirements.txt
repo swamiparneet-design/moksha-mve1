@@ -39,4 +39,4 @@ soundfile
 gTTS
 
 # RunPod Serverless
-runpod==2.8.0
+runpod==1.8.1
