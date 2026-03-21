@@ -1,0 +1,54 @@
+# Environment variables
+.env
+
+# API Keys (never commit these!)
+*.key
+*.secret
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Virtual environments
+venv/
+env/
+.venv/
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Build outputs
+dist/
+build/
+*.egg-info/
+
+# Logs
+*.log
+logs/
+
+# Temp files (IMPORTANT!)
+temp/
+cache/
+output/
+*.tmp
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# RunPod specific
+.runpod/
+
+# Test files (optional)
+test_*.py
+*_test.py
+
+# Storage folder (keep media files out of git)
+storage/
