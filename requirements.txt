@@ -28,9 +28,15 @@ tqdm==4.66.1
 nltk==3.8.1
 langdetect==1.0.9
 
-# Optional - for future TTS integration
-# torch
-# torchaudio
+# TTS Requirements (including fish-speech dependencies)
+torch==2.1.0
+torchaudio==2.1.0
+transformers==4.35.0
+tokenizers==0.14.0
+numpy==1.24.0
+librosa==0.10.0
+soundfile==0.12.1
+gTTS==2.3.1
 
 # RunPod Serverless
 runpod==2.8.0
