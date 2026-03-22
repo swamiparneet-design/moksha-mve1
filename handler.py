@@ -37,17 +37,22 @@ def generate_video(job):
         print(f"FISH_SPEECH_MODEL_PATH: {os.environ.get('FISH_SPEECH_MODEL_PATH')}")
         print("=" * 50)
         
+        # Return proper RunPod format
         return {
-            "success": True,
-            "debug": {
-                "volume_exists": volume_exists,
-                "models_exist": models_exist,
-                "files_count": len(files),
-                "files": files[:5],
-                "python_path": sys.path,
-                "env_vars": {
-                    "FISH_SPEECH": os.environ.get('FISH_SPEECH_MODEL_PATH'),
-                    "PYTHONPATH": os.environ.get('PYTHONPATH'),
+            "id": job.get('id', 'unknown'),
+            "input": job,
+            "output": {
+                "success": True,
+                "debug": {
+                    "volume_exists": volume_exists,
+                    "models_exist": models_exist,
+                    "files_count": len(files),
+                    "files": files[:5],
+                    "python_path": sys.path,
+                    "env_vars": {
+                        "FISH_SPEECH": os.environ.get('FISH_SPEECH_MODEL_PATH'),
+                        "PYTHONPATH": os.environ.get('PYTHONPATH'),
+                    }
                 }
             }
         }
@@ -55,9 +60,13 @@ def generate_video(job):
         print(f"❌ ERROR: {str(e)}")
         print(f"Traceback: {traceback.format_exc()}")
         return {
-            "success": False,
-            "error": str(e),
-            "traceback": traceback.format_exc()
+            "id": job.get('id', 'unknown'),
+            "input": job,
+            "output": {
+                "success": False,
+                "error": str(e),
+                "traceback": traceback.format_exc()
+            }
         }
 
 
