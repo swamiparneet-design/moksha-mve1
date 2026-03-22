@@ -41,4 +41,4 @@ RUN mkdir -p /app/cache/scripts \
     && mkdir -p /app/outputs
 
 # RunPod serverless handler
-CMD ["python", "-m", "runpod.serverless", "--start_path", "handler.py"]
+CMD ["python", "handler.py"]
