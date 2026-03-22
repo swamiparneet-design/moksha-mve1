@@ -12,14 +12,30 @@ def generate_video(job):
     """
     Debug handler to check volume and models
     """
+    import traceback
+    
     try:
+        print("=" * 50)
+        print("🔍 HANDLER STARTED")
+        print("=" * 50)
+        
         # Check volume and models
+        print("Checking /runpod-volume...")
         volume_exists = Path('/runpod-volume').exists()
+        print(f"Volume exists: {volume_exists}")
+        
+        print("Checking /runpod-volume/checkpoints/s2-pro...")
         models_exist = Path('/runpod-volume/checkpoints/s2-pro').exists()
+        print(f"Models path exists: {models_exist}")
         
         files = []
         if models_exist:
             files = [f.name for f in Path('/runpod-volume/checkpoints/s2-pro').iterdir()]
+            print(f"Files found: {len(files)}")
+        
+        print(f"PYTHONPATH: {os.environ.get('PYTHONPATH')}")
+        print(f"FISH_SPEECH_MODEL_PATH: {os.environ.get('FISH_SPEECH_MODEL_PATH')}")
+        print("=" * 50)
         
         return {
             "success": True,
@@ -36,7 +52,8 @@ def generate_video(job):
             }
         }
     except Exception as e:
-        import traceback
+        print(f"❌ ERROR: {str(e)}")
+        print(f"Traceback: {traceback.format_exc()}")
         return {
             "success": False,
             "error": str(e),
