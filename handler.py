@@ -9,7 +9,7 @@ import sys
 from pathlib import Path
 import asyncio
 
-def generate_video(job):
+async def generate_video(job):
     """
     Production handler - generates audio using Fish-Speech
     """
@@ -36,14 +36,14 @@ def generate_video(job):
         # Initialize voice engine
         voice_engine = VoiceEngine()
         
-        # Generate audio
+        # Generate audio using correct method name
         output_path = "/app/outputs/test_output.wav"
-        asyncio.run(voice_engine.generate_voice(
+        await voice_engine.generate(
             text=text,
             language=language,
             emotion=emotion,
             output_path=output_path
-        ))
+        )
         
         print(f"✅ Audio generated: {output_path}")
         
