@@ -1,61 +1,67 @@
 """
 RunPod Serverless Handler for MOKSHA MVE-1
-Debug version - checks volume and models
+Production version - generates real audio with Fish-Speech
 """
 
 import runpod
 import os
 import sys
 from pathlib import Path
+import asyncio
 
 def generate_video(job):
     """
-    Debug handler to check volume and models
+    Production handler - generates audio using Fish-Speech
     """
     import traceback
     
     try:
         print("=" * 50)
-        print("🔍 HANDLER STARTED")
+        print("🎤 AUDIO GENERATION STARTED")
         print("=" * 50)
         
-        # Check volume and models
-        print("Checking /runpod-volume...")
-        volume_exists = Path('/runpod-volume').exists()
-        print(f"Volume exists: {volume_exists}")
+        # Get input parameters
+        input_data = job.get('input', job)
+        text = input_data.get('text', 'Test')
+        language = input_data.get('language', 'hindi')
+        emotion = input_data.get('emotion', 'neutral')
         
-        print("Checking /runpod-volume/checkpoints/s2-pro...")
-        models_exist = Path('/runpod-volume/checkpoints/s2-pro').exists()
-        print(f"Models path exists: {models_exist}")
+        print(f"Text: {text}")
+        print(f"Language: {language}")
+        print(f"Emotion: {emotion}")
         
-        files = []
-        if models_exist:
-            files = [f.name for f in Path('/runpod-volume/checkpoints/s2-pro').iterdir()]
-            print(f"Files found: {len(files)}")
+        # Import voice engine
+        from engines.voice_engine import VoiceEngine
         
-        print(f"PYTHONPATH: {os.environ.get('PYTHONPATH')}")
-        print(f"FISH_SPEECH_MODEL_PATH: {os.environ.get('FISH_SPEECH_MODEL_PATH')}")
-        print("=" * 50)
+        # Initialize voice engine
+        voice_engine = VoiceEngine()
         
-        # Return proper RunPod format
+        # Generate audio
+        output_path = "/app/outputs/test_output.wav"
+        asyncio.run(voice_engine.generate_voice(
+            text=text,
+            language=language,
+            emotion=emotion,
+            output_path=output_path
+        ))
+        
+        print(f"✅ Audio generated: {output_path}")
+        
+        # Check if file exists
+        audio_exists = Path(output_path).exists()
+        print(f"Audio file exists: {audio_exists}")
+        
         return {
             "id": job.get('id', 'unknown'),
             "input": job,
             "output": {
                 "success": True,
-                "debug": {
-                    "volume_exists": volume_exists,
-                    "models_exist": models_exist,
-                    "files_count": len(files),
-                    "files": files[:5],
-                    "python_path": sys.path,
-                    "env_vars": {
-                        "FISH_SPEECH": os.environ.get('FISH_SPEECH_MODEL_PATH'),
-                        "PYTHONPATH": os.environ.get('PYTHONPATH'),
-                    }
-                }
+                "audio_path": output_path,
+                "audio_exists": audio_exists,
+                "message": "Audio generation successful"
             }
         }
+        
     except Exception as e:
         print(f"❌ ERROR: {str(e)}")
         print(f"Traceback: {traceback.format_exc()}")
