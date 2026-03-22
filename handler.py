@@ -1,6 +1,6 @@
 """
 RunPod Serverless Handler for MOKSHA MVE-1
-Handles video generation requests via Fish-Speech TTS
+Debug version - checks volume and models
 """
 
 import runpod
@@ -8,71 +8,40 @@ import os
 import sys
 from pathlib import Path
 
-# Add workspace to path
-sys.path.insert(0, '/workspace')
-
 def generate_video(job):
     """
-    Main handler for video generation requests
-    
-    Args:
-        job (dict): Contains 'input' with text, language, emotion, etc.
-    
-    Returns:
-        dict: Result with audio_path or error message
+    Debug handler to check volume and models
     """
-    import asyncio
-    
-    async def _generate():
-        try:
-            # Parse input
-            job_input = job.get('input', {})
-            text = job_input.get('text', '')
-            language = job_input.get('language', 'hindi')
-            emotion = job_input.get('emotion', 'neutral')
-            voice_type = job_input.get('voice_type', 'male')
-            
-            if not text:
-                return {"error": "No text provided"}
-            
-            print(f"🎬 Processing request: {text[:50]}...")
-            print(f"Language: {language}, Emotion: {emotion}")
-            
-            # Import voice engine
-            from engines.voice_engine import VoiceEngine
-            
-            # Initialize
-            voice_engine = VoiceEngine()
-            
-            # Generate audio
-            cache_key = f"{text}_{language}_{emotion}_{voice_type}"
-            audio_path = await voice_engine.generate(
-                text=text,
-                emotion=emotion,
-                language=language,
-                voice_type=voice_type,
-                cache_key=cache_key
-            )
-            
-            if audio_path and Path(audio_path).exists():
-                print(f"✅ Audio generated: {audio_path}")
-                return {
-                    "success": True,
-                    "audio_path": audio_path,
-                    "duration": len(audio_path) if hasattr(audio_path, '__len__') else 0
+    try:
+        # Check volume and models
+        volume_exists = Path('/runpod-volume').exists()
+        models_exist = Path('/runpod-volume/checkpoints/s2-pro').exists()
+        
+        files = []
+        if models_exist:
+            files = [f.name for f in Path('/runpod-volume/checkpoints/s2-pro').iterdir()]
+        
+        return {
+            "success": True,
+            "debug": {
+                "volume_exists": volume_exists,
+                "models_exist": models_exist,
+                "files_count": len(files),
+                "files": files[:5],
+                "python_path": sys.path,
+                "env_vars": {
+                    "FISH_SPEECH": os.environ.get('FISH_SPEECH_MODEL_PATH'),
+                    "PYTHONPATH": os.environ.get('PYTHONPATH'),
                 }
-            else:
-                return {"error": "Failed to generate audio", "success": False}
-                
-        except Exception as e:
-            print(f"❌ Error: {str(e)}")
-            return {
-                "error": str(e),
-                "success": False
             }
-    
-    # Run async function
-    return asyncio.run(_generate())
+        }
+    except Exception as e:
+        import traceback
+        return {
+            "success": False,
+            "error": str(e),
+            "traceback": traceback.format_exc()
+        }
 
 
 # Start RunPod serverless handler
