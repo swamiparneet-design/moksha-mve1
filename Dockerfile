@@ -26,9 +26,9 @@ COPY . .
 # Set environment variables
 ENV PYTHONPATH=/workspace
 ENV FFMPEG_PATH=/usr/bin/ffmpeg
-ENV FISH_SPEECH_MODEL_PATH=/workspace/checkpoints/s2-pro
-ENV LIVEPORTRAIT_MODEL_PATH=/workspace/LivePortrait/models
-ENV LTX_VIDEO_MODEL_PATH=/workspace/LTX-Video
+ENV FISH_SPEECH_MODEL_PATH=/runpod-volume/checkpoints/s2-pro
+ENV LIVEPORTRAIT_MODEL_PATH=/runpod-volume/LivePortrait/models
+ENV LTX_VIDEO_MODEL_PATH=/runpod-volume/LTX-Video
 
 # Create cache directories
 RUN mkdir -p /workspace/cache/scripts \
