@@ -16,11 +16,6 @@ COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt \
     && pip install --no-cache-dir runpod
 
-# Create required directories
-RUN mkdir -p /app/checkpoints/s2-pro \
-    && mkdir -p /app/LivePortrait/models \
-    && mkdir -p /app/LTX-Video
-
 # Copy project files
 COPY . .
 
@@ -31,7 +26,7 @@ ENV FISH_SPEECH_MODEL_PATH=/runpod-volume/checkpoints/s2-pro
 ENV LIVEPORTRAIT_MODEL_PATH=/runpod-volume/LivePortrait/models
 ENV LTX_VIDEO_MODEL_PATH=/runpod-volume/LTX-Video
 
-# Create cache directories
+# Create app directories (NOT model dirs - those are on volume)
 RUN mkdir -p /app/cache/scripts \
     && mkdir -p /app/cache/voices \
     && mkdir -p /app/cache/broll \
