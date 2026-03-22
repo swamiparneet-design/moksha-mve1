@@ -3,6 +3,7 @@ VOICE ENGINE - TTS Integration
 Converts text to natural Hindi/Haryanvi/Bhojpuri speech
 """
 import hashlib
+import os
 from pathlib import Path
 from loguru import logger
 from config import Config
@@ -138,22 +139,26 @@ class VoiceEngine:
         try:
             self.logger.info(f"🐟 Fish-Speech inference: {text[:50]}...")
             
+            # Determine checkpoint path with fallback options
+            checkpoint_path = os.getenv('FISH_SPEECH_MODEL_PATH', './checkpoints/s2-pro')
+            if not os.path.exists(checkpoint_path):
+                checkpoint_path = '../checkpoints/s2-pro'
+                if not os.path.exists(checkpoint_path):
+                    checkpoint_path = os.getenv('FISH_SPEECH_DEFAULT_PATH', 'fish-speech/checkpoints/s2-pro')
+            
             # Fish-Speech inference command
-            # Note: This will work once models are downloaded
             cmd = [
                 sys.executable,
                 "-m", "fish_speech.tools.inference",
                 "--text", text,
-                "--language", language,
-                "--emotion", emotion,
                 "--output", str(output_path),
-                "--checkpoint-path", "checkpoints/s2-pro"
+                "--checkpoint-path", checkpoint_path
             ]
             
-            # Run inference
+            # Use current working directory for RunPod compatibility
             result = subprocess.run(
                 cmd,
-                cwd=r"C:\Amar\Project\AI-OS\Mokshya-AI\fish-speech",
+                cwd=os.getcwd(),
                 capture_output=True,
                 text=True,
                 timeout=300  # 5 minute timeout
