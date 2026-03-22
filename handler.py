@@ -36,13 +36,11 @@ async def generate_video(job):
         # Initialize voice engine
         voice_engine = VoiceEngine()
         
-        # Generate audio using correct method name
-        output_path = "/app/outputs/test_output.wav"
-        await voice_engine.generate(
+        # Generate audio (returns cached path automatically)
+        output_path = await voice_engine.generate(
             text=text,
             language=language,
-            emotion=emotion,
-            output_path=output_path
+            emotion=emotion
         )
         
         print(f"✅ Audio generated: {output_path}")
